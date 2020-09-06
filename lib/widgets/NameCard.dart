@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:convert';
+import 'package:studentapp/constants.dart';
 
 class NameCard {
   String name;
   String profilePic;
   String profileDescription;
+  String school;
+  String position;
   BuildContext context;
 
-  NameCard({this.name, this.profilePic, this.profileDescription, this.context});
+  NameCard(
+      {this.name,
+      this.profilePic,
+      this.profileDescription,
+      this.school,
+      this.position,
+      this.context});
 
   Widget build() {
     return Padding(
@@ -18,6 +28,7 @@ class NameCard {
           color: Color(0xFF111328),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
+        padding: EdgeInsets.all(8.0),
         child: Center(
             child: GestureDetector(
           onTap: showInfo,
@@ -28,22 +39,23 @@ class NameCard {
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'data/picture/$profilePic',
-                      ),
-                      fit: BoxFit.cover,
-                    )),
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: MemoryImage(base64.decode(this.profilePic)),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
-              Text(
-                name,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: "Roboto",
+              FittedBox(
+                child: Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "Roboto",
+                  ),
                 ),
               ),
             ],
@@ -65,23 +77,36 @@ class NameCard {
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: AssetImage(
-                  'data/picture/$profilePic',
-                ),
+                image: MemoryImage(base64.decode(this.profilePic)),
                 fit: BoxFit.cover,
               )),
         ),
         SizedBox(
           height: 10,
         ),
-        Text(
-          name,
-          style: TextStyle(
-            fontSize: 40,
-            fontFamily: ".SF UI Display",
+        FittedBox(
+          child: Text(
+            name,
+            style: TextStyle(
+              fontSize: 40,
+              fontFamily: ".SF UI Display",
+            ),
           ),
         ),
-        Divider(),
+        FittedBox(
+          child: Text(
+            position,
+            style: kSubtext,
+          ),
+        ),
+        Text(
+          school.replaceAll(",", ", "),
+          style: kSubtext,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Divider(color: Colors.white,),
       ]),
       children: <Widget>[
         Text(
@@ -94,7 +119,6 @@ class NameCard {
   }
 
   void showInfo() async {
-    print(context);
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -102,7 +126,5 @@ class NameCard {
         });
   }
 
-  void updateDB() async {
-    
-  }
+  void updateDB() async {}
 }

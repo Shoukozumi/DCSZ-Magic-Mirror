@@ -11,6 +11,8 @@ class TeacherDB{
   BuildContext context;
 
   Map dataMap;
+  Map resourceMap;
+
   File localData;
   File localResource;
 
@@ -30,8 +32,13 @@ class TeacherDB{
       this.localData.writeAsString(await DefaultAssetBundle.of(context).loadString('data/data.json'));
       print("default data written to disk");
 
+    if(!await this.localResource.exists())
+      this.localResource.writeAsString(await DefaultAssetBundle.of(context).loadString('data/resource.json'));
+    print("default resource written to disk");
+
     try {
       this.dataMap = json.decode((await this.localData.readAsString()));
+      this.resourceMap = json.decode(await this.localResource.readAsString());
     } catch (e){
       print("Error occured! \n$e");
     }
@@ -46,8 +53,11 @@ class TeacherDB{
     dataMap.forEach((key, v){ //v for value
       NameCard card = NameCard(
         name: v['name'],
-        profilePic: v['picture'],
+        profilePic: this.resourceMap[key],
         profileDescription: v['description'],
+        school: v['school'],
+        position: v['position'],
+
         context: context,
       );
 
@@ -83,11 +93,20 @@ class TeacherDB{
     bool flag = false;
 
     dataMap.forEach((key, v){ //v for value
-      if(v['name'].toLowerCase().contains(keyword.toLowerCase())) {
+      String lowerCaseSearch = keyword.toLowerCase();
+      String name = v['name'];
+      String profileDescription = v['description'];
+      String school = v['school'];
+      String position = v['position'];
+      
+      if(name.toLowerCase().contains(lowerCaseSearch) || position.toLowerCase().contains(lowerCaseSearch) || school.toLowerCase().contains(lowerCaseSearch)) {
         NameCard card = NameCard(
-          name: v['name'],
-          profilePic: v['picture'],
-          profileDescription: v['description'],
+          name: name,
+          profilePic: this.resourceMap[key],
+          profileDescription: profileDescription,
+          school: school,
+          position: position,
+
           context: context,
         );
 
