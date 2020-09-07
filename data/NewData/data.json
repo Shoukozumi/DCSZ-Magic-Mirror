@@ -13,6 +13,13 @@
         "picture": "aisling-okeeffe.jpg",
         "description": "I love this app"
     },
+    "yuki": {
+        "name": "Yuki Kume",
+        "school": "Senior School",
+        "position": "Media prefect",
+        "picture": "",
+        "description": "Is this working description"
+    },
     "alina-wu": {
         "name": "Alina Wu",
         "school": "DUCKS",
